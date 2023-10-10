@@ -794,7 +794,7 @@ void run_sim(Tissue &tissue) {
       if (grid_point->epicell) update_epicell(time_step, tissue, grid_point);
       update_chemokines(grid_point, *nbs, chemokines_to_update);
       update_virions(grid_point, *nbs, virions_to_update);
-      // if (grid_point->is_active()) tissue.set_active(grid_point);
+      if (grid_point->is_active()) tissue.set_active(grid_point);
     }
     barrier();
 
@@ -805,7 +805,7 @@ void run_sim(Tissue &tissue) {
           auto nbs = tissue.get_neighbors(grid_point->coords);
           if(grid_point->tcell)
             setup_bind(tissue, grid_point, *nbs);
-          // if (grid_point->is_active()) tissue.set_active(grid_point);
+          if (grid_point->is_active()) tissue.set_active(grid_point);
     }
     barrier();
     for (auto grid_point = tissue.get_first_active_grid_point(); grid_point;
@@ -815,7 +815,7 @@ void run_sim(Tissue &tissue) {
             execute_bind(grid_point);
           if(grid_point->epicell)
             execute_apop(grid_point);
-          // if (grid_point->is_active()) tissue.set_active(grid_point);
+          if (grid_point->is_active()) tissue.set_active(grid_point);
     }
     barrier();
 
@@ -825,7 +825,7 @@ void run_sim(Tissue &tissue) {
           auto nbs = tissue.get_neighbors(grid_point->coords);
           if(grid_point->tcell && grid_point->tcell->binding_period == -1)
             setup_move(tissue, grid_point, *nbs);
-          // if (grid_point->is_active()) tissue.set_active(grid_point);
+          if (grid_point->is_active()) tissue.set_active(grid_point);
     }
     barrier();
     for (auto grid_point = tissue.get_first_active_grid_point(); grid_point;
@@ -833,7 +833,7 @@ void run_sim(Tissue &tissue) {
           upcxx::progress();
           if(grid_point->tcell)
             execute_move(tissue, grid_point);
-          if (grid_point->is_active()) tissue.set_active(grid_point); // only need to do this at the last loop through active grid_points
+          if (grid_point->is_active()) tissue.set_active(grid_point);
     }
     barrier();
 
